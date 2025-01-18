@@ -45,13 +45,13 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public String handleDataIntegrityViolation(DataIntegrityViolationException ex) {
-        // Obtener el mensaje de la excepción (generalmente contiene la columna violada)
+        // Obtener el mensaje de la excepción
         String errorMessage = ex.getCause().getMessage();
 
-        // Utilizar expresión regular para extraer el nombre del campo (columna) violado
+        // Utilizar expresión regular para extraer el nombre del campo (columna)
         String fieldName = extractFieldNameFromErrorMessage(errorMessage);
 
-        // Si encontramos el campo violado, devolver un mensaje específico
+        // Si encontramos el campo que incumple, devolver un mensaje específico
         if (fieldName != null) {
             return "Error: El valor del campo '" + fieldName + "' ya existe en la base de datos. Por favor, ingrese un dato válido.";
         }

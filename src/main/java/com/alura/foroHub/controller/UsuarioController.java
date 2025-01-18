@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -27,6 +28,9 @@ public class UsuarioController {
     @Autowired
     private PerfilRepository perfilRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     @PostMapping
     public ResponseEntity<DatosRespuestaUsuario> registrarUsuario(@RequestBody @Valid DatosRegistroUsuario datosRegistroUsuario,
@@ -34,7 +38,13 @@ public class UsuarioController {
         Perfil perfilEstandar = perfilRepository.findById(2L)
                 .orElseThrow(() -> new RuntimeException("Perfil estándar no encontrado"));
 
-        Usuario usuario = usuarioRepository.save(new Usuario(datosRegistroUsuario,perfilEstandar));
+        String hashedPassword = passwordEncoder.encode(datosRegistroUsuario.password());
+
+
+
+        Usuario usuario = new Usuario(datosRegistroUsuario, perfilEstandar);
+        usuario.setPassword(hashedPassword); // Establecemos la contraseña codificada
+        usuarioRepository.save(usuario);
 
         DatosRespuestaUsuario datosRespuestaUsuario = new DatosRespuestaUsuario(
                 usuario.getId(),

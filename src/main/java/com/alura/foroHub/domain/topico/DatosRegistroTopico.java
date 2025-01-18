@@ -6,10 +6,15 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public record DatosRegistroTopico(
-        @NotBlank String titulo,
-        @NotBlank String mensaje,
-        @NotNull LocalDateTime fechaDeCreacion,
-        @NotNull Long autorId,
-        @NotNull Long cursoId
+        @NotBlank(message = "titulo es un campo obligatorio")
+        String titulo,
+        @NotBlank(message = "mensaje es un campo obligatorio")
+        String mensaje,
+        @NotNull (message = "fechaDeCreacion es un campo obligatorio")
+        LocalDateTime fechaDeCreacion,
+        @NotNull (message = "autorId es un campo obligatorio")
+        Long autorId,
+        @NotNull (message = "cursoId es un campo obligatorio")
+        Long cursoId
 ) {
 }
